@@ -1,25 +1,54 @@
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React from 'react';
+const MAX_TEXT_LENGTH = 15;
+class CheckInput extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            content: '',
+            message: '',
+        }
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleOnKeyPress = this.handleOnKeyPress.bind(this);
+    }
+    handleInputChange(e) {
+        this.setState({
+            content: e.target.value
+        })
+    }
+    handleOnKeyPress(e) {
+        if (e.charCode === 13) {
+            let message = '';
+            const { content } = this.state;
+            if (content.length > 0 && content.length <= MAX_TEXT_LENGTH) {
+                message = 'Nội dung hợp lệ.'
+            } else if (content.length > MAX_TEXT_LENGTH)  {
+                message = 'Nội dung quá dài, vui lòng đảm bảo nội dung nhỏ hơn hoặc bằng 15 ký tự'
+            }
+            this.setState({
+                message,
+            })
+        }
+    }
+    render() {
+        const { content } = this.state;
+        return (
+            <div>
+                <h3>Nội dung</h3>
+                <input
+                    value={content}
+                    onChange={this.handleInputChange}
+                    onKeyPress={this.handleOnKeyPress}
+                    name="name"
+                    placeholder="Nhập nội dung"
+                />
+                {this.state.message && (<div>
+                    <h3>{this.state.message}</h3>
+                </div>)}
+            </div>
+        )
+    }
 }
-
-export default App;
+export default CheckInput;
